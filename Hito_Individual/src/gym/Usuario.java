@@ -5,14 +5,14 @@ public class Usuario {
     private String planTrabajo;
     private double peso;
     private int eventosMes;
-    private boolean horasExtra;
+    private int horasExtra;
 
-    public Usuario(String nombre, String planTrabajo, double peso, int eventosMes, boolean horasExtra) {
+    public Usuario(String nombre, String planTrabajo, double peso, int eventosMes, int horasExtra2) {
         this.nombre = nombre;
         this.planTrabajo = planTrabajo;
         this.peso = peso;
         this.eventosMes = eventosMes;
-        this.horasExtra = horasExtra;
+        this.horasExtra = horasExtra2;
     }
 
     public String getNombre() {
@@ -31,7 +31,7 @@ public class Usuario {
         return eventosMes;
     }
 
-    public boolean isHorasExtra() {
+    public int isHorasExtra() {
         return horasExtra;
     }
 }

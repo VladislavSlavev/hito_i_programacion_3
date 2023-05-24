@@ -12,7 +12,7 @@ public class ProgramaGimnasio extends JFrame {
     private JTextField txtPlanTrabajo;
     private JTextField txtPeso;
     private JTextField txtEventosMes;
-    private JCheckBox chkHorasExtra;
+    private JTextField chkHorasExtra;
 
     public ProgramaGimnasio() {
         usuarios = new ArrayList<>();
@@ -40,7 +40,7 @@ public class ProgramaGimnasio extends JFrame {
         txtEventosMes = new JTextField(10);
 
         JLabel lblHorasExtra = new JLabel("¿Añadir horas extra este mes?");
-        chkHorasExtra = new JCheckBox();
+        chkHorasExtra = new JTextField(10);
 
         JButton btnCalcular = new JButton("Resultado");
         btnCalcular.addActionListener(new ActionListener() {
@@ -113,7 +113,7 @@ public class ProgramaGimnasio extends JFrame {
         double peso = Double.parseDouble(txtPeso.getText());
         /*String categoria = txtCategoria.getText();*/
         int eventosMes = Integer.parseInt(txtEventosMes.getText());
-        boolean horasExtra = chkHorasExtra.isSelected();
+        int horasExtra = Integer.parseInt(chkHorasExtra.getText());
 
         Usuario usuario = new Usuario(nombre, planTrabajo, peso, eventosMes, horasExtra);
         usuarios.add(usuario);
@@ -125,16 +125,18 @@ public class ProgramaGimnasio extends JFrame {
         double costoTotal = usuario.getEventosMes() * 10; // Cada evento tiene un costo de 10
 
         String comparacionPeso = "";
-        if (usuario.getPeso() < 50 /*&& usuario.getCategoria().equals("CategoriaA")*/) {
-            comparacionPeso = "Peso inferior a la categoría Pesada";
-        } else if (usuario.getPeso() >= 50 /*&& usuario.getPeso() < 60 && usuario.getCategoria().equals("CategoriaB")*/) {
-            comparacionPeso = "Peso dentro de la categoría B";
-        } else if (usuario.getPeso() >= 60 /*&& usuario.getPeso() < 70 && usuario.getCategoria().equals("CategoriaC")*/) {
-            comparacionPeso = "Peso dentro de la categoría C";
-        } else if (usuario.getPeso() >= 70 /*&& usuario.getCategoria().equals("CategoriaD")*/) {
-            comparacionPeso = "Peso superior a la categoría D";
+        if (usuario.getPeso() < 66 /*&& usuario.getCategoria().equals("CategoriaA")*/) {
+            comparacionPeso = "Peso inferior a la categoría minima";
+        } else if (usuario.getPeso() >= 66 && usuario.getPeso() <73) {
+            comparacionPeso = "Peso dentro de la categoría Pluma";
+        } else if (usuario.getPeso() >= 73 && usuario.getPeso() <81) {
+            comparacionPeso = "Peso dentro de la categoría Ligero";
+        } else if (usuario.getPeso() >= 81 && usuario.getPeso() <90) {
+            comparacionPeso = "Peso dentro de la categoria Medio";
+        } else if (usuario.getPeso() >= 90 && usuario.getPeso() <100) {
+            comparacionPeso = "Peso dentro de la categoria Medio-Pesado";
         } else {
-            comparacionPeso = "Peso fuera de rango para la categoría";
+            comparacionPeso = "Peso dentro de la categoria Pesado";
         }
 
         String resultado = "Nombre: " + usuario.getNombre() + "\n\n" +
@@ -143,7 +145,6 @@ public class ProgramaGimnasio extends JFrame {
                 "- Entrenamientos y competiciones: $" + costoTotal + "\n\n" +
                 "Comparación de peso:\n" +
                 "- Peso actual: " + usuario.getPeso() + " kg\n" +
-               /* "- Categoría de peso: " + usuario.getCategoria() + "\n" +*/
                 "- Resultado: " + comparacionPeso;
 
         JOptionPane.showMessageDialog(this, resultado, "Resultados", JOptionPane.INFORMATION_MESSAGE);
