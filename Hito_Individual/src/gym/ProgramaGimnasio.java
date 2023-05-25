@@ -9,14 +9,17 @@ import java.util.List;
 public class ProgramaGimnasio extends JFrame {
     private List<Usuario> usuarios;
     private JTextField txtNombre;
-    private JTextField txtPlanTrabajo;
+    private JComboBox<String> txtPlanTrabajo;
     private JTextField txtPeso;
     private JTextField txtEventosMes;
     private JTextField chkHorasExtra;
+    
+    private String[] planesTrabajo = {"","Principiante", "Intermedio", "Elite"};
+
 
     public ProgramaGimnasio() {
         usuarios = new ArrayList<>();
-
+        
         // Configuración de la ventana
         setTitle("Programa de Gimnasio");
         setSize(600, 500);
@@ -28,7 +31,7 @@ public class ProgramaGimnasio extends JFrame {
         txtNombre = new JTextField("", 20);
 
         JLabel lblPlanTrabajo = new JLabel("Plan de trabajo (Principiante/Intermedio/Elite):");
-        txtPlanTrabajo = new JTextField(20);
+        txtPlanTrabajo = new JComboBox<>(planesTrabajo);
 
         JLabel lblPeso = new JLabel("Peso actual (kg):");
         txtPeso = new JTextField(10);
@@ -39,7 +42,7 @@ public class ProgramaGimnasio extends JFrame {
         JLabel lblEventosMes = new JLabel("Eventos presentados este mes(Máximo 2):");
         txtEventosMes = new JTextField(10);
 
-        JLabel lblHorasExtra = new JLabel("¿Añadir horas extra este mes?");
+        JLabel lblHorasExtra = new JLabel("¿Añadir horas extra este mes?(Máximo 5)");
         chkHorasExtra = new JTextField(10);
 
         JButton btnCalcular = new JButton("Resultado");
@@ -109,11 +112,33 @@ public class ProgramaGimnasio extends JFrame {
 
     private void agregarUsuario() {
         String nombre = txtNombre.getText();
-        String planTrabajo = txtPlanTrabajo.getText();
+        String planTrabajo = txtPlanTrabajo.getSelectedItem().toString();
         double peso = Double.parseDouble(txtPeso.getText());
-        /*String categoria = txtCategoria.getText();*/
         int eventosMes = Integer.parseInt(txtEventosMes.getText());
         int horasExtra = Integer.parseInt(chkHorasExtra.getText());
+        
+        if (nombre.isEmpty()) {
+        	mostrarError("Debes introducir un nombre");
+        	return;
+        }
+        
+        if (planTrabajo=="") {
+        	mostrarError("Debes elegir un plan");
+        	return;
+        }
+        if (peso==0.00) {
+        	mostrarError("Debes introducir un peso");
+        	return;
+        }
+        if (horasExtra>5) {
+        	mostrarError("Sólo puedes tener un máximo de 5 horas extra");
+        	return;
+        }
+        
+        if (eventosMes>2) {
+        	mostrarError("Sólo puedes estar en un máximo de dos eventos");
+        	return;
+        }
 
         Usuario usuario = new Usuario(nombre, planTrabajo, peso, eventosMes, horasExtra);
         usuarios.add(usuario);
@@ -125,7 +150,7 @@ public class ProgramaGimnasio extends JFrame {
         double costoTotal = usuario.getEventosMes() * 10; // Cada evento tiene un costo de 10
 
         String comparacionPeso = "";
-        if (usuario.getPeso() < 66 /*&& usuario.getCategoria().equals("CategoriaA")*/) {
+        if (usuario.getPeso() < 66) {
             comparacionPeso = "Peso inferior a la categoría minima";
         } else if (usuario.getPeso() >= 66 && usuario.getPeso() <73) {
             comparacionPeso = "Peso dentro de la categoría Pluma";
@@ -142,12 +167,17 @@ public class ProgramaGimnasio extends JFrame {
         String resultado = "Nombre: " + usuario.getNombre() + "\n\n" +
                 "Plan de trabajo: " + usuario.getPlanTrabajo() + "\n\n" +
                 "Lista de gastos del mes:\n" +
-                "- Entrenamientos y competiciones: $" + costoTotal + "\n\n" +
+                "- Entrenamientos y competiciones: " + costoTotal + " € \n\n" +
                 "Comparación de peso:\n" +
                 "- Peso actual: " + usuario.getPeso() + " kg\n" +
-                "- Resultado: " + comparacionPeso;
+                "- Categoria: " + comparacionPeso;
 
         JOptionPane.showMessageDialog(this, resultado, "Resultados", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    
+    private void mostrarError(String mensaje) {
+    	JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public static void main(String[] args) {
@@ -155,7 +185,9 @@ public class ProgramaGimnasio extends JFrame {
             @Override
             public void run() {
                 new ProgramaGimnasio();
+             
             }
         });
     }
 }
+
